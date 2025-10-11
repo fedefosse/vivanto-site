@@ -72,8 +72,6 @@ export default function VivantoWireframe() {
     return out;
   };
 
-  // Fallbacks explícitos (solo si existen)
-  const FALLBACKS = ["/Images/hero.jpg", "/Images/proceso.jpg"];
 
   // Estados con las fuentes finales detectadas
   const [heroSources, setHeroSources] = useState<string[]>([]);
@@ -255,7 +253,6 @@ export default function VivantoWireframe() {
         }}
         onMouseEnter={() => setHovered(id)}
         onMouseLeave={() => setHovered("")}
-        aria-pressed={isActive}
         className="px-6 py-3 rounded-full border transition shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.35)]"
         style={{ backgroundColor: bg, borderColor: br, color: tx }}
       >
@@ -282,23 +279,26 @@ export default function VivantoWireframe() {
 
     const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 
-    const onWheel = (e: WheelEvent) => {
+    const onWheel: EventListener = (ev) => {
+      const e = ev as WheelEvent;
       e.preventDefault();
       targetY.current = clamp(targetY.current + e.deltaY, 0, maxY.current);
     };
 
     let startY = 0;
-    const onTouchStart = (e: TouchEvent) => {
+    const onTouchStart: EventListener = (ev) => {
+      const e = ev as TouchEvent;
       isTouching.current = true;
       startY = e.touches[0].clientY;
     };
-    const onTouchMove = (e: TouchEvent) => {
+    const onTouchMove: EventListener = (ev) => {
+      const e = ev as TouchEvent;
       if (!isTouching.current) return;
       const dy = startY - e.touches[0].clientY;
       startY = e.touches[0].clientY;
       targetY.current = clamp(targetY.current + dy, 0, maxY.current);
     };
-    const onTouchEnd = () => { isTouching.current = false; };
+    const onTouchEnd: EventListener = () => { isTouching.current = false; };
 
     const animate = () => {
       // Lerp con amortiguación
@@ -328,10 +328,10 @@ export default function VivantoWireframe() {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", measure);
-      window.removeEventListener("wheel", onWheel as any);
-      window.removeEventListener("touchstart", onTouchStart as any);
-      window.removeEventListener("touchmove", onTouchMove as any);
-      window.removeEventListener("touchend", onTouchEnd as any);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
       document.body.style.overflow = "auto";
       document.body.style.height = "";
       root.style.transform = "";
