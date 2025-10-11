@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/* === VARIABLES DE MARCA VIVANTO === */
+:root {
+  --color-bg: #ffffff;
+  --color-text: #0a0a0a;
+  --color-gray: #f5f5f5;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+  --color-accent-maderas: #7a844f;
+  --color-accent-construcciones: #c16a3a;
+  --color-accent-smart: #4476a0;
+  --color-accent-empresas: #b8a13a;
+
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* === TIPOGRAFÍA GLOBAL === */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+/* === TITULARES === */
+h1, h2, h3 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.1; }
+h2 { font-size: clamp(1.75rem, 4vw, 3rem); }
+p { font-size: 1.125rem; line-height: 1.7; }
+
+/* === SECCIONES === */
+section {
+  width: 100%;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+/* === ANIMACIONES === */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.8s ease forwards;
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === BOTONES GENERALES === */
+.btn {
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid var(--color-text);
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px var(--color-shadow);
+}
+
+/* === COLORES CORPORATIVOS === */
+.btn-maderas:hover { background-color: var(--color-accent-maderas); color: white; border-color: var(--color-accent-maderas); }
+.btn-construcciones:hover { background-color: var(--color-accent-construcciones); color: white; border-color: var(--color-accent-construcciones); }
+.btn-smart:hover { background-color: var(--color-accent-smart); color: white; border-color: var(--color-accent-smart); }
+.btn-empresas:hover { background-color: var(--color-accent-empresas); color: white; border-color: var(--color-accent-empresas); }
+
+/* === SCROLLBAR LIMPIO === */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background-color: #999; }
