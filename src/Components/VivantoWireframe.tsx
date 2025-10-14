@@ -1,9 +1,14 @@
 
  "use client";
+
 import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import Head from "next/head";
+
+// Helpers para renderizar solo el slide actual y sus vecinos (mejor rendimiento)
+const wrap = (i: number, len: number) => (i + len) % len;
+const window3 = (i: number, len: number) => [wrap(i - 1, len), i, wrap(i + 1, len)];
 
 export default function VivantoWireframe() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -452,18 +457,21 @@ export default function VivantoWireframe() {
             onMouseEnter={() => setHeroPaused(true)}
             onMouseLeave={() => setHeroPaused(false)}
           >
-            {heroSources.map((src, i) => (
-              <Image
-                key={i}
-                src={src}
-                alt={`Hero ${i + 1}`}
-                fill
-                sizes="100vw"
-                priority={i === 0}
-                className="object-cover object-center transition-opacity duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-                style={{ opacity: heroIndex === i ? 1 : 0, willChange: "opacity" }}
-              />
-            ))}
+            {heroSources.length > 0 &&
+              window3(heroIndex, heroSources.length).map((idx) => (
+                <Image
+                  key={idx}
+                  src={heroSources[idx]}
+                  alt={`Hero ${idx + 1}`}
+                  fill
+                  sizes="100vw"
+                  priority={idx === 0}
+                  fetchPriority={idx === 0 ? "high" : "low"}
+                  quality={80}
+                  className="object-cover object-center transition-opacity duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  style={{ opacity: heroIndex === idx ? 1 : 0, willChange: "opacity" }}
+                />
+              ))}
           </div>
           <div className="absolute inset-0 bg-black/25 backdrop-blur-[1px]" />
 
@@ -515,18 +523,21 @@ export default function VivantoWireframe() {
         onMouseEnter={() => setIdPaused(true)}
         onMouseLeave={() => setIdPaused(false)}
       >
-        {idSources.map((src, i) => (
-          <Image
-            key={i}
-            src={src}
-            alt={`Proceso ${i + 1}`}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            priority={i === 0}
-            className="object-cover transition-opacity duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-            style={{ opacity: idIndex === i ? 1 : 0, willChange: "opacity" }}
-          />
-        ))}
+        {idSources.length > 0 &&
+          window3(idIndex, idSources.length).map((idx) => (
+            <Image
+              key={idx}
+              src={idSources[idx]}
+              alt={`Proceso ${idx + 1}`}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority={idx === 0}
+              fetchPriority={idx === 0 ? "high" : "low"}
+              quality={80}
+              className="object-cover transition-opacity duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+              style={{ opacity: idIndex === idx ? 1 : 0, willChange: "opacity" }}
+            />
+          ))}
       </div>
       <div className="mt-3 flex justify-center gap-2">
         {idSources.map((_, i) => (
@@ -624,23 +635,26 @@ export default function VivantoWireframe() {
           >
             {/* Alto responsivo del visor */}
             <div className="relative h-[58vh] md:h-[66vh] lg:h-[72vh] max-h-[920px] min-h-[320px]">
-              {cases.map((c, i) => (
-                <Image
-                  key={i}
-                  src={c.src}
-                  alt={c.alt}
-                  fill
-                  sizes="100vw"
-                  className="object-cover transition-opacity duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] cursor-zoom-in"
-                  style={{ opacity: caseIndex === i ? 1 : 0 }}
-                  priority={i === 0}
-                  onClick={() => {
-                    setLightboxIndex(i);
-                    setZoom(1);
-                    setLightboxOpen(true);
-                  }}
-                />
-              ))}
+              {cases.length > 0 &&
+                window3(caseIndex, cases.length).map((idx) => (
+                  <Image
+                    key={idx}
+                    src={cases[idx].src}
+                    alt={cases[idx].alt}
+                    fill
+                    sizes="100vw"
+                    priority={idx === 0}
+                    fetchPriority={idx === 0 ? "high" : "low"}
+                    quality={80}
+                    className="object-cover transition-opacity duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] cursor-zoom-in"
+                    style={{ opacity: caseIndex === idx ? 1 : 0 }}
+                    onClick={() => {
+                      setLightboxIndex(idx);
+                      setZoom(1);
+                      setLightboxOpen(true);
+                    }}
+                  />
+                ))}
 
               {/* etiqueta de división + color corporativo (enlace clickeable) */}
               {!!cases.length && (
