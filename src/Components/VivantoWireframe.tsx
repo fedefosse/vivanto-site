@@ -23,17 +23,17 @@ export default function VivantoWireframe() {
   } as const;
 
   const DIVISION_LOGOS: Record<keyof typeof COLORS, string> = {
-    maderas: "/Images/logo-maderas.png",
-    construcciones: "/Images/logo-construcciones.png",
-    smart: "/Images/logo-smart.png",
-    empresas: "/Images/logo-empresas.png",
+    maderas: "/images/logo-maderas.png",
+    construcciones: "/images/logo-construcciones.png",
+    smart: "/images/logo-smart.png",
+    empresas: "/images/logo-empresas.png",
   };
 
   const DIVISION_COVERS: Record<keyof typeof COLORS, string> = {
-    maderas: "/Images/divisiones/maderas-cover.jpg",
-    construcciones: "/Images/divisiones/construcciones-cover.jpg",
-    smart: "/Images/divisiones/smart-cover.jpg",
-    empresas: "/Images/divisiones/empresas-cover.jpg",
+    maderas: "/images/divisiones/maderas-cover.jpg",
+    construcciones: "/images/divisiones/construcciones-cover.jpg",
+    smart: "/images/divisiones/smart-cover.jpg",
+    empresas: "/images/divisiones/empresas-cover.jpg",
   };
 
   // Utilidades para detectar imágenes reales preservando el orden exacto (1,2,3,...)
@@ -51,7 +51,7 @@ export default function VivantoWireframe() {
   const resolveNumberedImages = async (
     prefix: string,
     max: number,
-    basePath = "/Images"
+    basePath = "/images"
   ): Promise<string[]> => {
     const out: string[] = [];
     for (let i = 1; i <= max; i++) {
@@ -94,13 +94,13 @@ export default function VivantoWireframe() {
   // Carga inicial de listas válidas, preservando el orden
   useEffect(() => {
     (async () => {
-      const numbered = await resolveNumberedImages("hero", 10, "/Images");
-      const withFallback = await loadOrderedImages([...numbered, "/Images/hero.jpg"]);
+      const numbered = await resolveNumberedImages("hero", 10, "/images");
+      const withFallback = await loadOrderedImages([...numbered, "/images/hero.jpg"]);
       if (withFallback.length) setHeroSources(withFallback);
     })();
     (async () => {
-      const numbered = await resolveNumberedImages("proceso", 10, "/Images");
-      const withFallback = await loadOrderedImages([...numbered, "/Images/proceso.jpg"]);
+      const numbered = await resolveNumberedImages("proceso", 10, "/images");
+      const withFallback = await loadOrderedImages([...numbered, "/images/proceso.jpg"]);
       if (withFallback.length) setIdSources(withFallback);
     })();
   }, []);
@@ -157,10 +157,10 @@ export default function VivantoWireframe() {
 
       for (const tag of tags) {
         // Buscar hasta 10 por si acaso; sólo añadirá las que existan y mantendrá el orden 1..N
-        // Ejemplo de ruta final: /Images/casos/maderas-1.jpg
+        // Ejemplo de ruta final: /images/casos/maderas-1.jpg
         // Reutilizamos resolveNumberedImages con prefijo `${tag}-`
         // eslint-disable-next-line no-await-in-loop
-        const found = await resolveNumberedImages(`${tag}-`, 10, "/Images/casos");
+        const found = await resolveNumberedImages(`${tag}-`, 10, "/images/casos");
         found.forEach((src, i) => {
           assembled.push({ src, alt: `${tag} ${i + 1}`, tag });
         });
@@ -346,8 +346,8 @@ export default function VivantoWireframe() {
           <div className="relative mt-4 h-14 md:h-16 flex items-center justify-between rounded-[28px] border border-white/40 bg-white/20 backdrop-blur-3xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.2)] ring-1 ring-black/5 supports-[backdrop-filter]:bg-white/15 transition-all duration-500">
             <div aria-hidden className="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/40 to-white/10" />
             <div className="flex items-center gap-2 pl-3">
-              <img
-                src="/Images/logo-vivanto.png"
+            <img
+                src="/images/logo-vivanto.png"
                 alt="Logo Vivanto"
                 className="h-10 md:h-12 w-auto object-contain"
                 loading="eager"
@@ -795,7 +795,7 @@ export default function VivantoWireframe() {
       {/* SEPARADOR CON MARCA DE AGUA */}
       <section aria-hidden className="mt-16 md:mt-24">
         <div className="mx-auto max-w-7xl px-4">
-          <img src="/Images/logo-vivanto.png" alt="" className="h-12 md:h-16 opacity-10 mx-auto" />
+          <img src="/images/logo-vivanto.png" alt="" className="h-12 md:h-16 opacity-10 mx-auto" />
         </div>
       </section>
 
@@ -816,7 +816,7 @@ export default function VivantoWireframe() {
         <div className="mx-auto max-w-4xl px-4 text-center">
           <div className="flex items-center justify-center gap-3 md:gap-4">
             <img
-              src="/Images/logo-vivanto.png"
+              src="/images/logo-vivanto.png"
               alt="Vivanto"
               className="h-24 md:h-36 w-auto opacity-90"
             />
@@ -835,7 +835,7 @@ export default function VivantoWireframe() {
       <footer className="border-t border-neutral-200/70 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <img src="/Images/logo-vivanto.png" alt="Vivanto" className="h-6 opacity-60" />
+            <img src="/images/logo-vivanto.png" alt="Vivanto" className="h-6 opacity-60" />
             <span className="text-sm text-neutral-500">© {new Date().getFullYear()} Vivanto</span>
           </div>
           <div className="text-sm text-neutral-500 flex items-center gap-4">
