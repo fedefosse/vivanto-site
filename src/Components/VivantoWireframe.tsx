@@ -4,7 +4,6 @@
 import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import Head from "next/head";
 
 // Helpers para renderizar solo el slide actual y sus vecinos (mejor rendimiento)
 const wrap = (i: number, len: number) => (i + len) % len;
@@ -279,6 +278,29 @@ export default function VivantoWireframe() {
     document.body.style.height = "";
   }, []);
 
+  // --- Reveal on scroll (IntersectionObserver) ---
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const els = Array.from(document.querySelectorAll<HTMLElement>(".reveal-on-scroll"));
+    if (!("IntersectionObserver" in window) || !els.length) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const el = entry.target as HTMLElement;
+          if (entry.isIntersecting) {
+            el.classList.add("is-visible");
+            obs.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" }
+    );
+
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <div className="w-full bg-white text-neutral-900">
       {/* NAV */}
@@ -297,7 +319,7 @@ export default function VivantoWireframe() {
               />
               <span className="font-medium tracking-wide">VIVANTO</span>
             </div>
-            <nav className="hidden md:flex items-center gap-8 text-sm pr-3">
+            <nav className="hidden md:flex items-center gap-8 text-sm pr-3 text-neutral-900">
               <a
                 href="#maderas"
                 className="transition-colors"
@@ -372,17 +394,6 @@ export default function VivantoWireframe() {
         </div>
       </header>
       <div ref={containerRef} className="min-h-screen">
-      {heroSources[0] && (
-        <Head>
-          <link
-            rel="preload"
-            as="image"
-            href={heroSources[0]}
-            imageSrcSet={`${heroSources[0]} 1920w`}
-            imageSizes="100vw"
-          />
-        </Head>
-      )}
 
       {/* HERO FULL-BLEED */}
       <section className="relative pt-20 md:pt-24">
@@ -404,7 +415,7 @@ export default function VivantoWireframe() {
                   priority={idx === 0}
                   fetchPriority={idx === 0 ? "high" : "low"}
                   quality={80}
-                  className="object-cover object-center transition-opacity duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  className="object-cover object-center transition-opacity duration-[1600ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
                   style={{ opacity: heroIndex === idx ? 1 : 0, willChange: "opacity" }}
                 />
               ))}
@@ -450,7 +461,7 @@ export default function VivantoWireframe() {
       </section>
 
 {/* IDENTIDAD / QUÉ HACEMOS */}
-<section className="bg-white fade-in">
+<section className="bg-white text-neutral-900 fade-in">
   <div className="mx-auto max-w-7xl px-6 md:px-8 flex flex-col md:flex-row items-center gap-10">
     {/* Imagen o video de proceso */}
     <div className="flex-1">
@@ -470,7 +481,7 @@ export default function VivantoWireframe() {
               priority={idx === 0}
               fetchPriority={idx === 0 ? "high" : "low"}
               quality={80}
-              className="object-cover transition-opacity duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+              className="object-cover transition-opacity duration-[1600ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
               style={{ opacity: idIndex === idx ? 1 : 0, willChange: "opacity" }}
             />
           ))}
@@ -582,7 +593,7 @@ export default function VivantoWireframe() {
                     priority={idx === 0}
                     fetchPriority={idx === 0 ? "high" : "low"}
                     quality={80}
-                    className="object-cover transition-opacity duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] cursor-zoom-in"
+                    className="object-cover transition-opacity duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] cursor-zoom-in"
                     style={{ opacity: caseIndex === idx ? 1 : 0 }}
                     onClick={() => {
                       setLightboxIndex(idx);
@@ -744,7 +755,7 @@ export default function VivantoWireframe() {
 
 
       {/* COMPROMISO VIVANTO (versión impactante) */}
-      <section className="relative mt-24 md:mt-32">
+      <section className="relative mt-24 md:mt-32 text-neutral-900">
         {/* fondo sutil con degradado y textura */}
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(80%_60%_at_50%_0%,rgba(0,0,0,0.06),transparent)]" />
         <div className="mx-auto max-w-7xl px-4">
@@ -854,17 +865,92 @@ export default function VivantoWireframe() {
         </div>
       </section>
 
-      {/* CTA FINAL */}
-      <section id="contacto" className="mt-20 md:mt-32 mb-24">
-        <div className="mx-auto max-w-4xl px-4 text-center">
-          <div className="flex items-center justify-center gap-3 md:gap-4">
-            <h2 className="text-3xl md:text-5xl font-medium leading-tight">Tu espacio empieza hoy.</h2>
+      {/* LÍNEA DE TIEMPO — CÓMO TRABAJAMOS */}
+      <section className="relative py-16 md:py-20 mt-20 md:mt-28 overflow-hidden text-white bg-[#0e1216]">
+        {/* fondo degradado oscuro persistente */}
+        <div aria-hidden className="absolute inset-0 z-0 bg-gradient-to-b from-[#0e1216] via-[#12171c] to-[#0e1216]" />
+        {/* shimmer suave horizontal por encima del degradado */}
+        <div aria-hidden className="pointer-events-none absolute -inset-x-1 top-0 h-full opacity-[0.06] shimmer z-0" />
+
+        <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
+          <span className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white/80">
+            Nuestro proceso
+          </span>
+          <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-10">
+            Así construimos tu proyecto ideal
+          </h2>
+
+          <div className="relative grid md:grid-cols-4 gap-8 md:gap-10">
+            {[
+              { icon: "💬", title: "Descubrimiento", desc: "Escuchamos tus ideas y necesidades para definir el alcance real del proyecto." },
+              { icon: "📐", title: "Diseño", desc: "Creamos planos, renders y soluciones personalizadas con precisión y estilo." },
+              { icon: "🏗️", title: "Producción", desc: "Fabricamos con tecnología avanzada garantizando calidad y cumplimiento." },
+              { icon: "🔑", title: "Instalación", desc: "Coordinamos el montaje final, ajustes y entrega lista para disfrutar." },
+            ].map((step, i) => (
+              <div
+                key={i}
+                className="reveal-on-scroll group relative rounded-3xl border border-white/10 bg-white/[0.05] hover:bg-white/[0.08] p-6 md:p-8 transition will-change-transform"
+                style={{ transitionDelay: `${120 * i}ms` }}
+              >
+                <div className="text-4xl mb-3 float-slow">{step.icon}</div>
+                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+                <p className="text-white/70 text-sm md:text-base">{step.desc}</p>
+              </div>
+            ))}
           </div>
-          <p className="mt-3 text-neutral-600 md:text-lg">Diseña. Construye. Conecta. Vive.</p>
-          <div className="mt-8 flex flex-col md:flex-row gap-3 md:gap-4 justify-center">
-            <a className="px-6 py-3 rounded-full border border-neutral-300 text-neutral-900 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white active:border-neutral-900 active:bg-neutral-900 active:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition" href="#wsp">Hablar por WhatsApp</a>
-            <a className="px-6 py-3 rounded-full border border-neutral-300 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white active:border-neutral-900 active:bg-neutral-900 active:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition" href="tel:+57XXXXXXXXXX">Llamar ahora</a>
-            <a className="px-6 py-3 rounded-full border border-neutral-300 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white active:border-neutral-900 active:bg-neutral-900 active:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition" href="#agenda">Agendar visita técnica</a>
+
+          <div className="mt-12">
+            <a
+              href="#contacto"
+              className="px-8 py-3 rounded-full bg-white text-neutral-900 font-medium shadow-[0_10px_40px_-10px_rgba(255,255,255,0.4)] hover:bg-neutral-200 transition"
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.querySelector('#contacto') as HTMLElement | null;
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+            >
+              Comienza tu proyecto hoy
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA FINAL */}
+      <section id="contacto" className="relative mt-20 md:mt-32 mb-24">
+        {/* fondo sutil premium */}
+        <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(120%_80%_at_50%_0%,rgba(0,0,0,0.05),transparent)]" />
+        <div className="mx-auto max-w-4xl px-4">
+          <div className="reveal-on-scroll rounded-[28px] border border-neutral-200/70 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 px-6 md:px-10 py-10 md:py-14 text-center shadow-[0_20px_80px_-30px_rgba(0,0,0,0.25)]">
+            <h2 className="text-3xl md:text-5xl font-medium leading-tight">Tu espacio empieza hoy.</h2>
+            <p className="mt-3 text-neutral-600 md:text-lg">Diseña. Construye. Conecta. Vive.</p>
+
+            <div className="mt-8 flex flex-col md:flex-row gap-3 md:gap-4 justify-center">
+              <a
+                href="#wsp"
+                className="px-6 py-3 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition shadow-[0_10px_30px_-12px_rgba(0,0,0,0.35)]"
+              >
+                Hablar por WhatsApp
+              </a>
+              <a
+                href="tel:+573115457195"
+                className="px-6 py-3 rounded-full border border-neutral-300 text-neutral-900 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white active:border-neutral-900 active:bg-neutral-900 active:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition"
+              >
+                Llamar ahora
+              </a>
+              <a
+                href="#agenda"
+                className="px-6 py-3 rounded-full border border-neutral-300 text-neutral-900 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white active:border-neutral-900 active:bg-neutral-900 active:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition"
+              >
+                Agendar visita técnica
+              </a>
+            </div>
+
+            <p className="mt-4 text-sm text-neutral-500">
+              Respuesta media &lt; 1 hora. También en{" "}
+              <a href="mailto:hola@vivanto.co" className="underline hover:text-neutral-800">
+                hola@vivanto.co
+              </a>
+            </p>
           </div>
         </div>
       </section>
@@ -888,6 +974,46 @@ export default function VivantoWireframe() {
 
       <style jsx global>{`
         @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* Reveal on scroll */
+        .reveal-on-scroll {
+          opacity: 0;
+          transform: translateY(14px) scale(0.98);
+          transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1);
+        }
+        .reveal-on-scroll.is-visible {
+          opacity: 1;
+          transform: none;
+        }
+
+        /* Floating icon */
+        @keyframes float {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
+          100% { transform: translateY(0px); }
+        }
+        .float-slow {
+          animation: float 6s ease-in-out infinite;
+        }
+
+        /* Shimmer background band */
+        @keyframes shimmerMove {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        .shimmer {
+          background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%);
+          background-size: 200% 100%;
+          animation: shimmerMove 16s linear infinite;
+          mask-image: radial-gradient(60% 40% at 50% 50%, black 20%, transparent 70%);
+        }
+
+        /* Respectar prefers-reduced-motion */
+        @media (prefers-reduced-motion: reduce) {
+          .reveal-on-scroll { transition: none; transform: none; opacity: 1; }
+          .float-slow { animation: none; }
+          .shimmer { animation: none; }
+        }
       `}</style>
       </div>
     </div>
