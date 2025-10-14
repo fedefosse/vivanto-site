@@ -81,6 +81,7 @@ export default function VivantoWireframe() {
   // Estados con las fuentes finales detectadas
   const [heroSources, setHeroSources] = useState<string[]>([]);
   const [idSources, setIdSources] = useState<string[]>([]);
+  const [confianzaSources, setConfianzaSources] = useState<string[]>([]);
 
   // Valida una lista de candidatos simple, manteniendo orden y evitando duplicados exactos
   const loadOrderedImages = async (candidates: string[]) => {
@@ -107,6 +108,11 @@ export default function VivantoWireframe() {
       const numbered = await resolveNumberedImages("proceso", 10, "/images");
       const withFallback = await loadOrderedImages([...numbered, "/images/proceso.jpg"]);
       if (withFallback.length) setIdSources(withFallback);
+    })();
+    (async () => {
+      const numbered = await resolveNumberedImages("confianza-", 20, "/images/confianza");
+      const withFallback = await loadOrderedImages([...numbered]);
+      if (withFallback.length) setConfianzaSources(withFallback);
     })();
   }, []);
 
@@ -208,10 +214,8 @@ export default function VivantoWireframe() {
   // Forzar inicio arriba en recargas y desactivar restauración automática
   useEffect(() => {
     if (typeof window !== "undefined") {
-      if (!window.location.hash) {
-        window.history.scrollRestoration = "manual";
-        window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-      }
+      window.history.scrollRestoration = "manual";
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     }
   }, []);
 
@@ -219,10 +223,9 @@ export default function VivantoWireframe() {
   const scrollToId = (hash: string) => {
     const el = document.querySelector(hash) as HTMLElement | null;
     if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const offset = 80; // alto del header
-    const absoluteY = currentY.current + rect.top - offset;
-    targetY.current = Math.min(Math.max(absoluteY, 0), maxY.current);
+    const offset = 88; // alto del header fijo
+    const y = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: y, left: 0, behavior: "smooth" });
   };
 
   const Btn = (
@@ -258,6 +261,8 @@ export default function VivantoWireframe() {
         }}
         onMouseEnter={() => setHovered(id)}
         onMouseLeave={() => setHovered("")}
+        onTouchStart={() => setHovered(id)}
+        onTouchEnd={() => setHovered("")}
         className="px-6 py-3 rounded-full border transition shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.35)]"
         style={{ backgroundColor: bg, borderColor: br, color: tx }}
       >
@@ -266,81 +271,12 @@ export default function VivantoWireframe() {
     );
   };
 
-  // --- Smooth Scroll inercial (Apple-like) ---
+  // --- Scroll nativo con barra visible ---
   useEffect(() => {
-    const root = containerRef.current;
-    if (!root) return;
-
-    const setBody = (h: number) => {
-      document.body.style.height = `${h}px`;
-    };
-
-    const measure = () => {
-      // Altura real del contenido
-      const h = root.getBoundingClientRect().height;
-      maxY.current = Math.max(0, h - window.innerHeight);
-      setBody(h);
-    };
-
-    const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
-
-    const onWheel: EventListener = (ev) => {
-      const e = ev as WheelEvent;
-      e.preventDefault();
-      targetY.current = clamp(targetY.current + e.deltaY, 0, maxY.current);
-    };
-
-    let startY = 0;
-    const onTouchStart: EventListener = (ev) => {
-      const e = ev as TouchEvent;
-      isTouching.current = true;
-      startY = e.touches[0].clientY;
-    };
-    const onTouchMove: EventListener = (ev) => {
-      const e = ev as TouchEvent;
-      if (!isTouching.current) return;
-      const dy = startY - e.touches[0].clientY;
-      startY = e.touches[0].clientY;
-      targetY.current = clamp(targetY.current + dy, 0, maxY.current);
-    };
-    const onTouchEnd: EventListener = () => { isTouching.current = false; };
-
-    const animate = () => {
-      // Lerp con amortiguación
-      const ease = 0.08; // menor = más suave
-      const diff = targetY.current - currentY.current;
-      currentY.current += diff * ease;
-      // Evitar jitter por flotantes
-      if (Math.abs(diff) < 0.1) currentY.current = targetY.current;
-      root.style.transform = `translate3d(0, ${-currentY.current}px, 0)`;
-      rafRef.current = window.requestAnimationFrame(animate);
-    };
-
-    // Preparar entorno
+    // Asegura barra de scroll visible y sin alturas forzadas
     document.documentElement.style.scrollBehavior = "auto";
-    document.body.style.overflow = "hidden";
-    measure();
-    animate();
-
-    // Listeners
-    window.addEventListener("resize", measure, { passive: true });
-    window.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchmove", onTouchMove, { passive: false });
-    window.addEventListener("touchend", onTouchEnd, { passive: true });
-
-    // Limpieza
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      window.removeEventListener("resize", measure);
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("touchend", onTouchEnd);
-      document.body.style.overflow = "auto";
-      document.body.style.height = "";
-      root.style.transform = "";
-    };
+    document.body.style.overflow = "auto";
+    document.body.style.height = "";
   }, []);
 
   return (
@@ -435,7 +371,7 @@ export default function VivantoWireframe() {
           </div>
         </div>
       </header>
-      <div ref={containerRef} className="min-h-screen will-change-transform">
+      <div ref={containerRef} className="min-h-screen">
       {heroSources[0] && (
         <Head>
           <link
@@ -583,7 +519,7 @@ export default function VivantoWireframe() {
               key={b.id}
               id={b.id}
               href={`#${b.id}-detalle`}
-              className="group relative rounded-3xl overflow-hidden border border-neutral-200/70 bg-white hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.2)] transition"
+              className="group relative rounded-3xl overflow-hidden border border-neutral-200/70 bg-white hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.2)] transition scroll-mt-[88px]"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-100">
                 <Image
@@ -806,21 +742,114 @@ export default function VivantoWireframe() {
         )
       }
 
-      {/* SEPARADOR CON MARCA DE AGUA */}
-      <section aria-hidden className="mt-16 md:mt-24">
-        <div className="mx-auto max-w-7xl px-4">
-          <img src="/images/logo-vivanto.png" alt="" className="h-12 md:h-16 opacity-10 mx-auto" />
-        </div>
-      </section>
 
-      {/* CONFIANZA */}
-      <section className="mt-20 md:mt-28">
+      {/* COMPROMISO VIVANTO (versión impactante) */}
+      <section className="relative mt-24 md:mt-32">
+        {/* fondo sutil con degradado y textura */}
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(80%_60%_at_50%_0%,rgba(0,0,0,0.06),transparent)]" />
         <div className="mx-auto max-w-7xl px-4">
-          <h2 className="text-2xl md:text-3xl font-medium mb-6">Confianza</h2>
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-6 md:gap-10 items-center">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div key={i} className="h-10 md:h-12 bg-neutral-100 rounded-md" />
-            ))}
+          <div className="text-center mb-12 md:mb-16">
+            <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-medium bg-neutral-900 text-white/90">
+              ¿Por qué elegir a Vivanto?
+            </span>
+            <h2 className="text-3xl md:text-5xl font-semibold leading-tight">
+              Cero estrés. Resultados que se sienten.
+            </h2>
+            <p className="mt-4 text-neutral-600 md:text-lg max-w-3xl mx-auto">
+              Te acompañamos de principio a fin para que tu proyecto avance sin sorpresas:
+              presupuesto claro, fechas firmes y calidad medible. Tú disfrutas el proceso, nosotros
+              nos encargamos del resto.
+            </p>
+          </div>
+
+          {/* 3 pilares – cards con presencia */}
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+            {/* Garantía escrita */}
+            <div className="group rounded-3xl border border-neutral-200 bg-white p-6 md:p-8 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.15)] hover:shadow-[0_28px_80px_-20px_rgba(0,0,0,0.25)] transition">
+              <div className="flex items-center gap-3">
+                <div className="h-11 w-11 rounded-xl grid place-items-center bg-neutral-900 text-white text-2xl shadow-md">🛡️</div>
+                <h3 className="text-xl font-semibold">Garantía escrita</h3>
+              </div>
+              <p className="mt-3 text-neutral-700">
+                Cada entrega queda respaldada por documento de garantía y un plan de servicio real.
+              </p>
+              <ul className="mt-4 space-y-2 text-neutral-800">
+                <li>✔ Cobertura de instalación y ajustes.</li>
+                <li>✔ Visita técnica sin costo ante cualquier novedad.</li>
+                <li>✔ Evidencias y actas de cierre firmadas.</li>
+              </ul>
+            </div>
+
+            {/* Fechas y control */}
+            <div className="group rounded-3xl border border-neutral-200 bg-white p-6 md:p-8 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.15)] hover:shadow-[0_28px_80px_-20px_rgba(0,0,0,0.25)] transition">
+              <div className="flex items-center gap-3">
+                <div className="h-11 w-11 rounded-xl grid place-items-center bg-neutral-900 text-white text-2xl shadow-md">⏱️</div>
+                <h3 className="text-xl font-semibold">Fechas que se cumplen</h3>
+              </div>
+              <p className="mt-3 text-neutral-700">
+                Cronograma visible y seguimiento semanal por WhatsApp o correo.
+              </p>
+              <ul className="mt-4 space-y-2 text-neutral-800">
+                <li>✔ Hitos claros de Diseño → Producción → Instalación.</li>
+                <li>✔ Reportes con fotos del avance.</li>
+                <li>✔ Un responsable único de principio a fin.</li>
+              </ul>
+            </div>
+
+            {/* Calidad y estándares */}
+            <div className="group rounded-3xl border border-neutral-200 bg-white p-6 md:p-8 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.15)] hover:shadow-[0_28px_80px_-20px_rgba(0,0,0,0.25)] transition">
+              <div className="flex items-center gap-3">
+                <div className="h-11 w-11 rounded-xl grid place-items-center bg-neutral-900 text-white text-2xl shadow-md">🏗️</div>
+                <h3 className="text-xl font-semibold">Calidad que perdura</h3>
+              </div>
+              <p className="mt-3 text-neutral-700">
+                Materiales certificados y ensamblaje con estándares industriales.
+              </p>
+              <ul className="mt-4 space-y-2 text-neutral-800">
+                <li>✔ Control de calidad por etapas.</li>
+                <li>✔ Normas eléctricas y de seguridad.</li>
+                <li>✔ Preparado para domótica y redes.</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Mini pruebas de confianza */}
+          <div className="mt-10 grid gap-3 md:grid-cols-3 text-sm text-neutral-700">
+            <div className="rounded-2xl border border-neutral-200 bg-white px-4 py-3 flex items-center justify-center gap-2">
+              <span>📄</span> Cotización clara y sin letra pequeña
+            </div>
+            <div className="rounded-2xl border border-neutral-200 bg-white px-4 py-3 flex items-center justify-center gap-2">
+              <span>🧰</span> Servicio post–instalación incluido
+            </div>
+            <div className="rounded-2xl border border-neutral-200 bg-white px-4 py-3 flex items-center justify-center gap-2">
+              <span>🧭</span> Acompañamiento de un responsable único
+            </div>
+          </div>
+
+          {/* CTA dual */}
+          <div className="mt-12 flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4">
+            <a
+              href="#contacto"
+              className="px-7 py-3 rounded-full border border-neutral-300 text-neutral-900 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white active:border-neutral-900 active:bg-neutral-900 active:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition shadow-[0_10px_30px_-10px_rgba(0,0,0,0.15)]"
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.querySelector('#contacto') as HTMLElement | null;
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+            >
+              Quiero cotizar mi proyecto
+            </a>
+            <a
+              href="#divisiones"
+              className="px-7 py-3 rounded-full border border-neutral-300 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white active:border-neutral-900 active:bg-neutral-900 active:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition"
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.querySelector('#divisiones') as HTMLElement | null;
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+            >
+              Ver lo que podemos hacer
+            </a>
           </div>
         </div>
       </section>
@@ -829,18 +858,13 @@ export default function VivantoWireframe() {
       <section id="contacto" className="mt-20 md:mt-32 mb-24">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <div className="flex items-center justify-center gap-3 md:gap-4">
-            <img
-              src="/images/logo-vivanto.png"
-              alt="Vivanto"
-              className="h-24 md:h-36 w-auto opacity-90"
-            />
             <h2 className="text-3xl md:text-5xl font-medium leading-tight">Tu espacio empieza hoy.</h2>
           </div>
           <p className="mt-3 text-neutral-600 md:text-lg">Diseña. Construye. Conecta. Vive.</p>
           <div className="mt-8 flex flex-col md:flex-row gap-3 md:gap-4 justify-center">
-            <a className="px-6 py-3 rounded-full bg-neutral-900 text-white hover:opacity-90 transition" href="#wsp">Hablar por WhatsApp</a>
-            <a className="px-6 py-3 rounded-full border border-neutral-300 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white transition" href="tel:+57XXXXXXXXXX">Llamar ahora</a>
-            <a className="px-6 py-3 rounded-full border border-neutral-300 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white transition" href="#agenda">Agendar visita técnica</a>
+            <a className="px-6 py-3 rounded-full border border-neutral-300 text-neutral-900 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white active:border-neutral-900 active:bg-neutral-900 active:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition" href="#wsp">Hablar por WhatsApp</a>
+            <a className="px-6 py-3 rounded-full border border-neutral-300 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white active:border-neutral-900 active:bg-neutral-900 active:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition" href="tel:+57XXXXXXXXXX">Llamar ahora</a>
+            <a className="px-6 py-3 rounded-full border border-neutral-300 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white active:border-neutral-900 active:bg-neutral-900 active:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition" href="#agenda">Agendar visita técnica</a>
           </div>
         </div>
       </section>
