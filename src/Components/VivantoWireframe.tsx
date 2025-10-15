@@ -33,12 +33,6 @@ export default function VivantoWireframe() {
     empresas: "/images/logo-empresas.png",
   };
 
-  const DIVISION_COVERS: Record<keyof typeof COLORS, string> = {
-    maderas: "/images/divisiones/maderas-cover.jpg",
-    construcciones: "/images/divisiones/construcciones-cover.jpg",
-    smart: "/images/divisiones/smart-cover.jpg",
-    empresas: "/images/divisiones/empresas-cover.jpg",
-  };
 
   // Utilidades para detectar imágenes reales preservando el orden exacto (1,2,3,...)
   const EXTS = ["jpg", "jpeg", "png", "webp"] as const;
@@ -81,6 +75,35 @@ export default function VivantoWireframe() {
   const [heroSources, setHeroSources] = useState<string[]>([]);
   const [idSources, setIdSources] = useState<string[]>([]);
   const [confianzaSources, setConfianzaSources] = useState<string[]>([]);
+
+  // Detecta la primera extensión existente (jpg/jpeg/png/webp) para una ruta sin extensión
+  const tryExts = async (pathNoExt: string) => {
+    for (const ext of EXTS) {
+      const candidate = `${pathNoExt}.${ext}`;
+      // eslint-disable-next-line no-await-in-loop
+      if (await imageExists(candidate)) return candidate;
+    }
+    return "";
+  };
+
+  const [divisionCovers, setDivisionCovers] = useState<
+    Record<"maderas" | "construcciones" | "smart" | "empresas", string>
+  >({ maderas: "", construcciones: "", smart: "", empresas: "" });
+
+  useEffect(() => {
+    (async () => {
+      const keys: ("maderas" | "construcciones" | "smart" | "empresas")[] = [
+        "maderas",
+        "construcciones",
+        "smart",
+        "empresas",
+      ];
+      const entries = await Promise.all(
+        keys.map(async (k) => [k, await tryExts(`/images/divisiones/${k}-cover`)] as const)
+      );
+      setDivisionCovers(Object.fromEntries(entries) as any);
+    })();
+  }, []);
 
   // Valida una lista de candidatos simple, manteniendo orden y evitando duplicados exactos
   const loadOrderedImages = async (candidates: string[]) => {
@@ -558,7 +581,7 @@ export default function VivantoWireframe() {
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-100">
                 <Image
-                  src={DIVISION_COVERS[b.id as keyof typeof COLORS]}
+                  src={divisionCovers[b.id as keyof typeof COLORS] || `/images/divisiones/${b.id}-cover.jpg`}
                   alt={`${b.title} – portada`}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
