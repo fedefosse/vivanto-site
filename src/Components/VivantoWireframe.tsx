@@ -308,17 +308,41 @@ export default function VivantoWireframe() {
         <div className="mx-auto max-w-7xl px-4">
           <div className="relative mt-4 h-14 md:h-16 flex items-center justify-between rounded-[28px] border border-white/40 bg-white/20 backdrop-blur-3xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.2)] ring-1 ring-black/5 supports-[backdrop-filter]:bg-white/15 transition-all duration-500">
             <div aria-hidden className="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/40 to-white/10" />
-            <div className="flex items-center gap-2 pl-3">
-            <img
+            <a
+              href="#"
+              role="button"
+              aria-label="Ir al inicio"
+              className="flex items-center gap-2 pl-3 cursor-pointer select-none bg-transparent border-0 pointer-events-auto"
+              onClick={(e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+                if (window.history.replaceState) {
+                  window.history.replaceState(null, "", window.location.pathname);
+                }
+              }}
+              onKeyDown={(e) => {
+                // Soporta Enter y Espacio como activadores
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+                  if (window.history.replaceState) {
+                    window.history.replaceState(null, "", window.location.pathname);
+                  }
+                }
+              }}
+              tabIndex={0}
+            >
+              <img
                 src="/images/logo-vivanto.png"
                 alt="Logo Vivanto"
                 className="h-10 md:h-12 w-auto object-contain"
                 loading="eager"
                 decoding="async"
                 style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.22))" }}
+                draggable={false}
               />
               <span className="font-medium tracking-wide">VIVANTO</span>
-            </div>
+            </a>
             <nav className="hidden md:flex items-center gap-8 text-sm pr-3 text-neutral-900">
               <a
                 href="#maderas"
@@ -926,7 +950,9 @@ export default function VivantoWireframe() {
 
             <div className="mt-8 flex flex-col md:flex-row gap-3 md:gap-4 justify-center">
               <a
-                href="#wsp"
+                href="https://wa.me/573115457195?text=Hola%20Vivanto,%20quiero%20cotizar%20mi%20proyecto."
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-6 py-3 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition shadow-[0_10px_30px_-12px_rgba(0,0,0,0.35)]"
               >
                 Hablar por WhatsApp
