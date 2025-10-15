@@ -35,7 +35,7 @@ export default function VivantoWireframe() {
 
 
   // Utilidades para detectar imágenes reales preservando el orden exacto (1,2,3,...)
-  const EXTS = ["jpg", "jpeg", "png", "webp"] as const;
+  const EXTS = ["webp"] as const;
 
   const imageExists = (src: string) =>
     new Promise<boolean>((resolve) => {
@@ -45,7 +45,7 @@ export default function VivantoWireframe() {
       img.src = src;
     });
 
-  // Resuelve hero1.(jpg|jpeg|png|webp), hero2...(en ese orden), etc.
+  // Resuelve hero1.webp, hero2.webp...(en ese orden), etc. Corta en el primer hueco
   const resolveNumberedImages = async (
     prefix: string,
     max: number,
@@ -53,19 +53,11 @@ export default function VivantoWireframe() {
   ): Promise<string[]> => {
     const out: string[] = [];
     for (let i = 1; i <= max; i++) {
-      let picked: string | null = null;
-      for (const ext of EXTS) {
-        const candidate = `${basePath}/${prefix}${i}.${ext}`;
-        // esperamos hasta confirmar si existe
-        // al elegir el primero válido por índice evitamos duplicados por caché
-        // y respetamos el orden exacto 1..N
-        // eslint-disable-next-line no-await-in-loop
-        if (await imageExists(candidate)) {
-          picked = candidate;
-          break;
-        }
-      }
-      if (picked) out.push(picked);
+      const candidate = `${basePath}/${prefix}${i}.webp`;
+      // eslint-disable-next-line no-await-in-loop
+      const ok = await imageExists(candidate);
+      if (!ok) break; // corta en el primer hueco: sólo 1 intento fallido por bloque
+      out.push(candidate);
     }
     return out;
   };
@@ -76,15 +68,6 @@ export default function VivantoWireframe() {
   const [idSources, setIdSources] = useState<string[]>([]);
   const [confianzaSources, setConfianzaSources] = useState<string[]>([]);
 
-  // Detecta la primera extensión existente (jpg/jpeg/png/webp) para una ruta sin extensión
-  const tryExts = async (pathNoExt: string) => {
-    for (const ext of EXTS) {
-      const candidate = `${pathNoExt}.${ext}`;
-      // eslint-disable-next-line no-await-in-loop
-      if (await imageExists(candidate)) return candidate;
-    }
-    return "";
-  };
 
   const [divisionCovers, setDivisionCovers] = useState<
     Record<"maderas" | "construcciones" | "smart" | "empresas", string>
@@ -99,7 +82,12 @@ export default function VivantoWireframe() {
         "empresas",
       ];
       const entries = await Promise.all(
-        keys.map(async (k) => [k, await tryExts(`/images/divisiones/${k}-cover`)] as const)
+        keys.map(async (k) => {
+          const candidate = `/images/divisiones/${k}-cover.webp`;
+          // eslint-disable-next-line no-await-in-loop
+          const ok = await imageExists(candidate);
+          return [k, ok ? candidate : ""] as const;
+        })
       );
       setDivisionCovers(Object.fromEntries(entries) as any);
     })();
@@ -122,17 +110,15 @@ export default function VivantoWireframe() {
   // Carga inicial de listas válidas, preservando el orden
   useEffect(() => {
     (async () => {
-      const numbered = await resolveNumberedImages("hero", 10, "/images");
-      const withFallback = await loadOrderedImages([...numbered, "/images/hero.jpg"]);
-      if (withFallback.length) setHeroSources(withFallback);
+      const numbered = await resolveNumberedImages("hero", 8, "/images");
+      if (numbered.length) setHeroSources(numbered);
     })();
     (async () => {
-      const numbered = await resolveNumberedImages("proceso", 10, "/images");
-      const withFallback = await loadOrderedImages([...numbered, "/images/proceso.jpg"]);
-      if (withFallback.length) setIdSources(withFallback);
+      const numbered = await resolveNumberedImages("proceso", 8, "/images");
+      if (numbered.length) setIdSources(numbered);
     })();
     (async () => {
-      const numbered = await resolveNumberedImages("confianza-", 20, "/images/confianza");
+      const numbered = await resolveNumberedImages("confianza-", 12, "/images/confianza");
       const withFallback = await loadOrderedImages([...numbered]);
       if (withFallback.length) setConfianzaSources(withFallback);
     })();
@@ -193,7 +179,7 @@ export default function VivantoWireframe() {
         // Ejemplo de ruta final: /images/casos/maderas-1.jpg
         // Reutilizamos resolveNumberedImages con prefijo `${tag}-`
         // eslint-disable-next-line no-await-in-loop
-        const found = await resolveNumberedImages(`${tag}-`, 10, "/images/casos");
+        const found = await resolveNumberedImages(`${tag}-`, 8, "/images/casos");
         found.forEach((src, i) => {
           assembled.push({ src, alt: `${tag} ${i + 1}`, tag });
         });
@@ -459,8 +445,8 @@ export default function VivantoWireframe() {
                   alt={`Hero ${idx + 1}`}
                   fill
                   sizes="100vw"
-                  priority={idx === 0}
-                  fetchPriority={idx === 0 ? "high" : "low"}
+                  priority={heroIndex === idx}
+                  fetchPriority={heroIndex === idx ? "high" : "low"}
                   quality={80}
                   className="object-cover object-center transition-opacity duration-[1600ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
                   style={{ opacity: heroIndex === idx ? 1 : 0, willChange: "opacity" }}
@@ -525,8 +511,8 @@ export default function VivantoWireframe() {
               alt={`Proceso ${idx + 1}`}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              priority={idx === 0}
-              fetchPriority={idx === 0 ? "high" : "low"}
+              priority={idIndex === idx}
+              fetchPriority={idIndex === idx ? "high" : "low"}
               quality={80}
               className="object-cover transition-opacity duration-[1600ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
               style={{ opacity: idIndex === idx ? 1 : 0, willChange: "opacity" }}
@@ -637,8 +623,8 @@ export default function VivantoWireframe() {
                     alt={cases[idx].alt}
                     fill
                     sizes="100vw"
-                    priority={idx === 0}
-                    fetchPriority={idx === 0 ? "high" : "low"}
+                    priority={caseIndex === idx}
+                    fetchPriority={caseIndex === idx ? "high" : "low"}
                     quality={80}
                     className="object-cover transition-opacity duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] cursor-zoom-in"
                     style={{ opacity: caseIndex === idx ? 1 : 0 }}
@@ -727,7 +713,6 @@ export default function VivantoWireframe() {
                   sizes="95vw"
                   className="object-contain select-none"
                   style={{ transform: `scale(${zoom})`, transformOrigin: "center center", willChange: "transform" }}
-                  priority
                 />
               )}
 
