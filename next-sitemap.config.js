@@ -1,4 +1,5 @@
-export default {
+/ ** @type {import('next-sitemap').IConfig} * /
+const config = {
   siteUrl: process.env.SITE_URL || 'https://vivanto-site.vercel.app',
   generateRobotsTxt: true,
   sitemapSize: 5000,
@@ -7,3 +8,5 @@ export default {
   priority: 0.7,
   outDir: 'public',
 };
+
+module.exports = config;

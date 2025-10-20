@@ -9,6 +9,8 @@ import Image from "next/image";
 const wrap = (i: number, len: number) => (i + len) % len;
 const window3 = (i: number, len: number) => [wrap(i - 1, len), i, wrap(i + 1, len)];
 
+const isExternal = (href: string) => href.startsWith("http://") || href.startsWith("https://");
+
 export default function VivantoWireframe() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -258,13 +260,15 @@ export default function VivantoWireframe() {
       <a
         key={id}
         href={href}
+        rel="noopener noreferrer"
         onClick={(e) => {
-          e.preventDefault();
-          setActive(id);
-          scrollToId(href);
-          // opcional: no dejar hash en la URL
-          if (window.history.replaceState) {
-            window.history.replaceState(null, "", window.location.pathname);
+          if (!isExternal(href)) {
+            e.preventDefault();
+            setActive(id);
+            scrollToId(href);
+            if (window.history.replaceState) {
+              window.history.replaceState(null, "", window.location.pathname);
+            }
           }
         }}
         onMouseEnter={() => setHovered(id)}
@@ -354,7 +358,7 @@ export default function VivantoWireframe() {
             </a>
             <nav className="hidden md:flex items-center gap-8 text-sm pr-3 text-neutral-900">
               <a
-                href="#maderas"
+                href="#divisiones"
                 className="transition-colors"
                 style={{ color: hovered === "maderas" ? COLORS.maderas : undefined }}
                 onMouseEnter={() => setHovered("maderas")}
@@ -362,14 +366,17 @@ export default function VivantoWireframe() {
                 onClick={(e) => {
                   e.preventDefault();
                   setActive("maderas");
-                  scrollToId("#maderas");
-                  if (window.history.replaceState) window.history.replaceState(null, "", window.location.pathname);
+                  scrollToId("#divisiones");
+                  if (window.history.replaceState) {
+                    window.history.replaceState(null, "", window.location.pathname);
+                  }
                 }}
+                // rel="noopener noreferrer"
               >
                 Maderas
               </a>
               <a
-                href="#construcciones"
+                href="#divisiones"
                 className="transition-colors"
                 style={{ color: hovered === "construcciones" ? COLORS.construcciones : undefined }}
                 onMouseEnter={() => setHovered("construcciones")}
@@ -377,14 +384,17 @@ export default function VivantoWireframe() {
                 onClick={(e) => {
                   e.preventDefault();
                   setActive("construcciones");
-                  scrollToId("#construcciones");
-                  if (window.history.replaceState) window.history.replaceState(null, "", window.location.pathname);
+                  scrollToId("#divisiones");
+                  if (window.history.replaceState) {
+                    window.history.replaceState(null, "", window.location.pathname);
+                  }
                 }}
+                // rel="noopener noreferrer"
               >
                 Construcciones
               </a>
               <a
-                href="#smart"
+                href="#divisiones"
                 className="transition-colors"
                 style={{ color: hovered === "smart" ? COLORS.smart : undefined }}
                 onMouseEnter={() => setHovered("smart")}
@@ -392,14 +402,17 @@ export default function VivantoWireframe() {
                 onClick={(e) => {
                   e.preventDefault();
                   setActive("smart");
-                  scrollToId("#smart");
-                  if (window.history.replaceState) window.history.replaceState(null, "", window.location.pathname);
+                  scrollToId("#divisiones");
+                  if (window.history.replaceState) {
+                    window.history.replaceState(null, "", window.location.pathname);
+                  }
                 }}
+                // rel="noopener noreferrer"
               >
                 Smart
               </a>
               <a
-                href="#empresas"
+                href="#divisiones"
                 className="transition-colors"
                 style={{ color: hovered === "empresas" ? COLORS.empresas : undefined }}
                 onMouseEnter={() => setHovered("empresas")}
@@ -407,9 +420,12 @@ export default function VivantoWireframe() {
                 onClick={(e) => {
                   e.preventDefault();
                   setActive("empresas");
-                  scrollToId("#empresas");
-                  if (window.history.replaceState) window.history.replaceState(null, "", window.location.pathname);
+                  scrollToId("#divisiones");
+                  if (window.history.replaceState) {
+                    window.history.replaceState(null, "", window.location.pathname);
+                  }
                 }}
+                // rel="noopener noreferrer"
               >
                 Empresas
               </a>
@@ -467,10 +483,10 @@ export default function VivantoWireframe() {
 
             {/* Botones con colores corporativos */}
             <div className="mt-10 flex flex-wrap justify-center gap-3">
-              {Btn("maderas", "MADERAS", "#maderas", "dark")}
-              {Btn("construcciones", "CONSTRUCCIONES", "#construcciones", "dark")}
-              {Btn("smart", "SMART", "#smart", "dark")}
-              {Btn("empresas", "EMPRESAS", "#empresas", "dark")}
+              {Btn("maderas", "MADERAS", "https://maderas.vivanto.co", "dark")}
+              {Btn("construcciones", "CONSTRUCCIONES", "https://construcciones.vivanto.co", "dark")}
+              {Btn("smart", "SMART", "https://smart.vivanto.co", "dark")}
+              {Btn("empresas", "EMPRESAS", "https://empresas.vivanto.co", "dark")}
             </div>
 
             {/* Dots HERO */}
@@ -541,10 +557,10 @@ export default function VivantoWireframe() {
         Desde muebles personalizados hasta obras civiles completas, conectamos cada detalle con tecnología moderna.
       </p>
       <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-        {Btn("maderas", "MADERAS", "#maderas", "light")}
-        {Btn("construcciones", "CONSTRUCCIONES", "#construcciones", "light")}
-        {Btn("smart", "SMART", "#smart", "light")}
-        {Btn("empresas", "EMPRESAS", "#empresas", "light")}
+        {Btn("maderas", "MADERAS", "https://maderas.vivanto.co", "light")}
+        {Btn("construcciones", "CONSTRUCCIONES", "https://construcciones.vivanto.co", "light")}
+        {Btn("smart", "SMART", "https://smart.vivanto.co", "light")}
+        {Btn("empresas", "EMPRESAS", "https://empresas.vivanto.co", "light")}
       </div>
     </div>
   </div>
@@ -562,7 +578,17 @@ export default function VivantoWireframe() {
             <a
               key={b.id}
               id={b.id}
-              href={`#${b.id}-detalle`}
+              href={
+                b.id === "maderas"
+                  ? "https://maderas.vivanto.co"
+                  : b.id === "construcciones"
+                  ? "https://construcciones.vivanto.co"
+                  : b.id === "smart"
+                  ? "https://smart.vivanto.co"
+                  : "https://empresas.vivanto.co"
+              }
+              target="_blank"
+              rel="noopener noreferrer"
               className="group relative rounded-3xl overflow-hidden border border-neutral-200/70 bg-white hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.2)] transition scroll-mt-[88px]"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-100">
@@ -578,7 +604,12 @@ export default function VivantoWireframe() {
               <div className="p-6 md:p-8 relative pr-28 md:pr-32">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xl md:text-2xl font-medium">{b.title}</h3>
-                  <div className="text-neutral-500 group-hover:text-neutral-900 transition mr-0">Explorar →</div>
+                  <span
+                    className="text-neutral-500 group-hover:text-neutral-900 transition mr-0 cursor-pointer underline-offset-4 group-hover:underline"
+                    aria-label={`Explorar ${b.title}`}
+                  >
+                    Explorar →
+                  </span>
                 </div>
                 <p className="mt-2 text-neutral-600">{b.desc}</p>
 
@@ -639,11 +670,21 @@ export default function VivantoWireframe() {
               {/* etiqueta de división + color corporativo (enlace clickeable) */}
               {!!cases.length && (
                 <a
-                  href={`#${cases[caseIndex].tag}`}
+                  href={
+                    cases[caseIndex].tag === "maderas"
+                      ? "https://maderas.vivanto.co"
+                      : cases[caseIndex].tag === "construcciones"
+                      ? "https://construcciones.vivanto.co"
+                      : cases[caseIndex].tag === "smart"
+                      ? "https://smart.vivanto.co"
+                      : "https://empresas.vivanto.co"
+                  }
                   className="absolute left-4 bottom-4 md:left-6 md:bottom-6 cursor-pointer group"
                   tabIndex={0}
                   aria-label={`Ir a sección ${cases[caseIndex].tag}`}
                   style={{ textDecoration: "none" }}
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <div
                     className="px-3 py-1.5 md:px-4 md:py-2 rounded-full text-white text-sm md:text-base font-medium shadow-lg transition duration-200 group-hover:brightness-110 group-hover:opacity-90"
@@ -958,7 +999,7 @@ export default function VivantoWireframe() {
 
             <div className="mt-8 flex flex-col md:flex-row gap-3 md:gap-4 justify-center">
               <a
-                href="https://wa.me/573115457195?text=Hola%20Vivanto,%20quiero%20cotizar%20mi%20proyecto."
+                href="https://wa.me/573143543254?text=Hola%20Vivanto,%20quiero%20cotizar%20mi%20proyecto."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition shadow-[0_10px_30px_-12px_rgba(0,0,0,0.35)]"
@@ -966,7 +1007,7 @@ export default function VivantoWireframe() {
                 Hablar por WhatsApp
               </a>
               <a
-                href="tel:+573115457195"
+                href="tel:+573143543254"
                 className="px-6 py-3 rounded-full border border-neutral-300 text-neutral-900 hover:border-neutral-900 hover:bg-neutral-900 hover:text-white active:border-neutral-900 active:bg-neutral-900 active:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 transition"
               >
                 Llamar ahora
@@ -997,10 +1038,10 @@ export default function VivantoWireframe() {
             <span className="text-sm text-neutral-500">© {new Date().getFullYear()} Vivanto</span>
           </div>
           <div className="text-sm text-neutral-500 flex items-center gap-4">
-            <a href="#maderas" className="hover:text-neutral-800">Maderas</a>
-            <a href="#construcciones" className="hover:text-neutral-800">Construcciones</a>
-            <a href="#smart" className="hover:text-neutral-800">Smart</a>
-            <a href="#empresas" className="hover:text-neutral-800">Empresas</a>
+            <a href="https://maderas.vivanto.co" className="hover:text-neutral-800" rel="noopener noreferrer">Maderas</a>
+            <a href="https://construcciones.vivanto.co" className="hover:text-neutral-800" rel="noopener noreferrer">Construcciones</a>
+            <a href="https://smart.vivanto.co" className="hover:text-neutral-800" rel="noopener noreferrer">Smart</a>
+            <a href="https://empresas.vivanto.co" className="hover:text-neutral-800" rel="noopener noreferrer">Empresas</a>
             <a href="#contacto" className="hover:text-neutral-800">Contacto</a>
           </div>
         </div>
