@@ -567,7 +567,7 @@ export default function VivantoWireframe() {
 </section>
 
       {/* DIVISIONES */}
-      <section className="mt-16 md:mt-24" id="divisiones">
+      <section className="mt-8 md:mt-8" id="divisiones">
         <div className="mx-auto max-w-7xl px-4 grid md:grid-cols-2 gap-6 md:gap-8">
           {[
             { id: "maderas", title: "MADERAS", desc: "Diseño y precisión en cada pieza." },
@@ -631,7 +631,7 @@ export default function VivantoWireframe() {
       </section>
 
       {/* INSPIRACIÓN VIVANTO (antes Casos) */}
-      <section className="mt-20 md:mt-28">
+      <section className="mt-8 md:mt-8">
         {/* Título centrado dentro del ancho de contenido */}
         <div className="mx-auto max-w-7xl px-4">
           <h2 className="text-2xl md:text-3xl font-medium mb-6">Inspiración Vivanto</h2>
@@ -828,7 +828,7 @@ export default function VivantoWireframe() {
 
 
       {/* COMPROMISO VIVANTO (versión impactante) */}
-      <section className="relative mt-24 md:mt-32 text-neutral-900">
+      <section className="relative mt-8 md:mt-12 text-neutral-900">
         {/* fondo sutil con degradado y textura */}
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(80%_60%_at_50%_0%,rgba(0,0,0,0.06),transparent)]" />
         <div className="mx-auto max-w-7xl px-4">
@@ -939,7 +939,7 @@ export default function VivantoWireframe() {
       </section>
 
       {/* LÍNEA DE TIEMPO — CÓMO TRABAJAMOS */}
-      <section className="relative py-16 md:py-20 mt-20 md:mt-28 overflow-hidden text-white bg-[#0e1216]">
+      <section className="relative py-16 md:py-20 mt-8 md:mt-8 overflow-hidden text-white bg-[#0e1216]">
         {/* fondo degradado oscuro persistente */}
         <div aria-hidden className="absolute inset-0 z-0 bg-gradient-to-b from-[#0e1216] via-[#12171c] to-[#0e1216]" />
         {/* shimmer suave horizontal por encima del degradado */}
@@ -989,7 +989,7 @@ export default function VivantoWireframe() {
       </section>
 
       {/* CTA FINAL */}
-      <section id="contacto" className="relative mt-20 md:mt-32 mb-24">
+      <section id="contacto" className="relative mt-8 md:mt-12 mb-8">
         {/* fondo sutil premium */}
         <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(120%_80%_at_50%_0%,rgba(0,0,0,0.05),transparent)]" />
         <div className="mx-auto max-w-4xl px-4">
