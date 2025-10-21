@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3000"),
+  metadataBase: new URL("https://vivanto.co"),
   title: {
     default: "Vivanto | Diseño, Construcción y Tecnología",
     template: "%s | Vivanto",
@@ -18,28 +18,31 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_CO",
-    url: "http://localhost:3000",
+    url: "https://vivanto.co",
     siteName: "Vivanto",
     title: "Vivanto | Diseño, Construcción y Tecnología",
     description:
       "Diseñamos, construimos y conectamos espacios que viven contigo.",
-    images: ["/og.jpg"],
+    images: [
+      { url: "/logo-vivanto.png", width: 1200, height: 630, alt: "Vivanto" },
+      { url: "/og.jpg", width: 1200, height: 630, alt: "Vivanto" }
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Vivanto | Diseño, Construcción y Tecnología",
     description:
       "Diseñamos, construimos y conectamos espacios que viven contigo.",
-    images: ["/og.jpg"],
+    images: ["/logo-vivanto.png", "/og.jpg"],
   },
   icons: {
     icon: [
-      { url: "/favicon.ico?v=2" },
+      { url: "/favicon.ico" },
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" }
     ],
-    apple: "/apple-touch-icon.png",
-    shortcut: "/favicon.ico?v=2",
+    apple: "/apple-touch-icon.ico",
+    shortcut: "/favicon.ico",
   },
   manifest: "/site.webmanifest",
 };
@@ -52,9 +55,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <head>
-        <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" sizes="any" />
-        <link rel="shortcut icon" href="/favicon.ico?v=2" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.ico" />
         <meta name="theme-color" content="#0e1216" />
         <script
           type="application/ld+json"
@@ -63,8 +66,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "Vivanto",
-              url: "http://localhost:3000",
-              logo: "http://localhost:3000/og.jpg",
+              url: "https://vivanto.co",
+              logo: "https://vivanto.co/logo-vivanto.png",
               address: {
                 "@type": "PostalAddress",
                 addressLocality: "Pereira",
