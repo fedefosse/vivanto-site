@@ -20,6 +20,7 @@ export default function VivantoWireframe() {
   const isTouching = useRef(false);
   const [active, setActive] = useState<"" | "maderas" | "construcciones" | "smart" | "empresas">("");
   const [hovered, setHovered] = useState<"" | "maderas" | "construcciones" | "smart" | "empresas">("");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const COLORS = {
     maderas: "#7a844f",        // verde oliva
@@ -291,6 +292,17 @@ export default function VivantoWireframe() {
     document.body.style.height = "";
   }, []);
 
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
   // --- Reveal on scroll (IntersectionObserver) ---
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -439,9 +451,87 @@ export default function VivantoWireframe() {
                 Contacto
               </a>
             </nav>
+            <button
+              type="button"
+              aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
+              className="md:hidden pr-3 text-neutral-900"
+              onClick={() => setMobileOpen((v) => !v)}
+            >
+              {mobileOpen ? "✕" : "☰"}
+            </button>
           </div>
         </div>
       </header>
+      {mobileOpen && (
+        <div
+          className="md:hidden fixed inset-0 z-[998] bg-black/40"
+          onClick={() => setMobileOpen(false)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="absolute top-0 left-0 right-0 rounded-b-[28px] border border-white/40 bg-white/95 backdrop-blur-3xl shadow-[0_20px_60px_-20px_rgba(0,0,0,0.35)]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <nav className="px-4 py-4 grid gap-3 text-base text-neutral-900">
+              <button
+                className="text-left px-4 py-3 rounded-2xl border border-neutral-200 hover:bg-neutral-100"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActive("maderas");
+                  scrollToId("#divisiones");
+                  setMobileOpen(false);
+                }}
+              >
+                Maderas
+              </button>
+              <button
+                className="text-left px-4 py-3 rounded-2xl border border-neutral-200 hover:bg-neutral-100"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActive("construcciones");
+                  scrollToId("#divisiones");
+                  setMobileOpen(false);
+                }}
+              >
+                Construcciones
+              </button>
+              <button
+                className="text-left px-4 py-3 rounded-2xl border border-neutral-200 hover:bg-neutral-100"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActive("smart");
+                  scrollToId("#divisiones");
+                  setMobileOpen(false);
+                }}
+              >
+                Smart
+              </button>
+              <button
+                className="text-left px-4 py-3 rounded-2xl border border-neutral-200 hover:bg-neutral-100"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActive("empresas");
+                  scrollToId("#divisiones");
+                  setMobileOpen(false);
+                }}
+              >
+                Empresas
+              </button>
+              <button
+                className="text-left px-4 py-3 rounded-2xl border border-neutral-900 bg-neutral-900 text-white"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToId("#contacto");
+                  setMobileOpen(false);
+                }}
+              >
+                Contacto
+              </button>
+            </nav>
+          </div>
+        </div>
+      )}
       <div ref={containerRef} className="min-h-screen">
 
       {/* HERO FULL-BLEED */}
@@ -513,9 +603,9 @@ export default function VivantoWireframe() {
 <section className="bg-white text-neutral-900 fade-in">
   <div className="mx-auto max-w-7xl px-6 md:px-8 flex flex-col md:flex-row items-center gap-10">
     {/* Imagen o video de proceso */}
-    <div className="flex-1">
+    <div className="flex-1 w-full min-w-0">
       <div
-        className="relative w-full rounded-3xl overflow-hidden shadow-lg aspect-[16/10] md:aspect-[4/3]"
+        className="relative w-full min-w-0 h-[320px] md:h-[360px] rounded-3xl overflow-hidden shadow-lg"
         onMouseEnter={() => setIdPaused(true)}
         onMouseLeave={() => setIdPaused(false)}
       >
