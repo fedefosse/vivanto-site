@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     description:
       "Transformamos espacios con diseño, precisión y tecnología. Proyectos integrales de construcción y mobiliario en Colombia.",
     images: [
-      { url: "/logo-vivanto.png", width: 1200, height: 630, alt: "Vivanto Logo" },
+      { url: "https://vivanto.co/logo-vivanto.png", width: 1200, height: 630, alt: "Vivanto Logo" },
       { url: "/og.jpg", width: 1200, height: 630, alt: "Vivanto preview" }
     ],
   },
@@ -39,10 +39,10 @@ export const metadata: Metadata = {
     title: "Vivanto | Diseño, Construcción y Tecnología",
     description:
       "Expertos en diseño, mobiliario y obras civiles. Innovamos en construcción y domótica en el Eje Cafetero.",
-    images: ["/logo-vivanto.png", "/og.jpg"],
+    images: ["https://vivanto.co/logo-vivanto.png", "https://vivanto.co/og.jpg"],
   },
   alternates: {
-    canonical: "https://vivanto.co",
+    canonical: "https://vivanto.co/",
   },
   icons: {
     icon: [
@@ -68,6 +68,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
         <link rel="shortcut icon" href="/favicon-32x32.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="canonical" href="https://vivanto.co/" />
+        <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#0e1216" />
         <meta name="robots" content="index, follow" />
         <meta name="author" content="Vivanto S.A.S." />
@@ -81,7 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Vivanto | Diseño, Construcción y Tecnología" />
         <meta name="twitter:description" content="Expertos en diseño, mobiliario y obras civiles. Innovamos en construcción y domótica." />
-        <meta name="twitter:image" content="https://vivanto.co/logo-vivanto.png" />
+        <meta name="twitter:image" content="https://vivanto.co/og.jpg" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
