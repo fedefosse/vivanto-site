@@ -6,7 +6,7 @@ const config = {
     policies: [{ userAgent: '*', allow: '/' }],
   },
   sitemapSize: 5000,
-  exclude: ['/404', '/_not-found'],
+  exclude: ['/404', '/_not-found', '/privacity'],
   changefreq: 'weekly',
   priority: 0.7,
   outDir: 'public',
