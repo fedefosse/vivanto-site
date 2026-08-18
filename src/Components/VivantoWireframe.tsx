@@ -563,12 +563,12 @@ export default function VivantoWireframe() {
 
           <div className="relative z-10 flex flex-col justify-center items-center h-full text-center text-white px-6">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold leading-[1.1] tracking-tight drop-shadow-[0_1px_8px_rgba(0,0,0,0.3)]">
-              Diseñamos, construimos y conectamos
+              Construimos espacios.
               <br className="hidden md:block" />
-              espacios que viven contigo.
+              Automatizamos empresas.
             </h1>
             <p className="mt-5 text-white/80 md:text-xl">
-              Minimalismo, precisión y tecnología aplicados a tu espacio.
+              Diseño y construcción para tus espacios. Software e inteligencia artificial para tu empresa.
             </p>
 
             {/* Botones con colores corporativos */}
@@ -640,11 +640,13 @@ export default function VivantoWireframe() {
     {/* Texto descriptivo */}
     <div className="flex-1 text-center md:text-left">
       <h2 className="text-4xl md:text-5xl font-semibold mb-6">
-        Diseño, precisión y tecnología <br /> en cada proyecto.
+        Un grupo empresarial, <br /> cuatro formas de crecer.
       </h2>
       <p className="text-neutral-700 mb-6">
-        En Vivanto combinamos el arte del diseño con la ingeniería funcional.  
-        Desde muebles personalizados hasta obras civiles completas, conectamos cada detalle con tecnología moderna.
+        Vivanto es un grupo empresarial colombiano con cuatro líneas de negocio: diseñamos y fabricamos
+        mobiliario a medida (Maderas), ejecutamos obras civiles y remodelaciones (Construcciones),
+        desarrollamos software y agentes de inteligencia artificial que automatizan procesos de negocio
+        (Smart), y ofrecemos soluciones integrales para compañías (Empresas).
       </p>
       <div className="flex flex-wrap gap-3 justify-center md:justify-start">
         {Btn("maderas", "MADERAS", "https://maderas.vivanto.co", "light")}
@@ -662,7 +664,7 @@ export default function VivantoWireframe() {
           {[
             { id: "maderas", title: "MADERAS", desc: "Diseño y precisión en cada pieza." },
             { id: "construcciones", title: "CONSTRUCCIONES", desc: "Obras que transforman espacios." },
-            { id: "smart", title: "SMART", desc: "Tecnología que vive contigo." },
+            { id: "smart", title: "SMART", desc: "Software y agentes de IA que automatizan tu empresa." },
             { id: "empresas", title: "EMPRESAS", desc: "Soluciones integrales para compañías." },
           ].map((b) => (
             <a
@@ -948,8 +950,8 @@ export default function VivantoWireframe() {
                 Cada entrega queda respaldada por documento de garantía y un plan de servicio real.
               </p>
               <ul className="mt-4 space-y-2 text-neutral-800">
-                <li>✔ Cobertura de instalación y ajustes.</li>
-                <li>✔ Visita técnica sin costo ante cualquier novedad.</li>
+                <li>✔ Cobertura de implementación, ajustes y soporte post-entrega.</li>
+                <li>✔ Acompañamiento técnico sin costo ante cualquier novedad.</li>
                 <li>✔ Evidencias y actas de cierre firmadas.</li>
               </ul>
             </div>
@@ -964,8 +966,8 @@ export default function VivantoWireframe() {
                 Cronograma visible y seguimiento semanal por WhatsApp o correo.
               </p>
               <ul className="mt-4 space-y-2 text-neutral-800">
-                <li>✔ Hitos claros de Diseño → Producción → Instalación.</li>
-                <li>✔ Reportes con fotos del avance.</li>
+                <li>✔ Hitos claros en cada etapa del proyecto.</li>
+                <li>✔ Reportes de avance con evidencia real.</li>
                 <li>✔ Un responsable único de principio a fin.</li>
               </ul>
             </div>
@@ -973,16 +975,16 @@ export default function VivantoWireframe() {
             {/* Calidad y estándares */}
             <div className="group rounded-3xl border border-neutral-200 bg-white p-6 md:p-8 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.15)] hover:shadow-[0_28px_80px_-20px_rgba(0,0,0,0.25)] transition">
               <div className="flex items-center gap-3">
-                <div className="h-11 w-11 rounded-xl grid place-items-center bg-neutral-900 text-white text-2xl shadow-md">🏗️</div>
+                <div className="h-11 w-11 rounded-xl grid place-items-center bg-neutral-900 text-white text-2xl shadow-md">⚙️</div>
                 <h3 className="text-xl font-semibold">Calidad que perdura</h3>
               </div>
               <p className="mt-3 text-neutral-700">
-                Materiales certificados y ensamblaje con estándares industriales.
+                Estándares certificados en obra y buenas prácticas de seguridad e integración en software.
               </p>
               <ul className="mt-4 space-y-2 text-neutral-800">
                 <li>✔ Control de calidad por etapas.</li>
-                <li>✔ Normas eléctricas y de seguridad.</li>
-                <li>✔ Preparado para domótica y redes.</li>
+                <li>✔ Normas de seguridad y protección de datos.</li>
+                <li>✔ Automatizaciones e integraciones listas para escalar.</li>
               </ul>
             </div>
           </div>
@@ -993,7 +995,7 @@ export default function VivantoWireframe() {
               <span>📄</span> Cotización clara y sin letra pequeña
             </div>
             <div className="rounded-2xl border border-neutral-200 bg-white px-4 py-3 flex items-center justify-center gap-2">
-              <span>🧰</span> Servicio post–instalación incluido
+              <span>🧰</span> Servicio post-entrega incluido
             </div>
             <div className="rounded-2xl border border-neutral-200 bg-white px-4 py-3 flex items-center justify-center gap-2">
               <span>🧭</span> Acompañamiento de un responsable único
@@ -1040,15 +1042,15 @@ export default function VivantoWireframe() {
             Nuestro proceso
           </span>
           <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-10">
-            Así construimos tu proyecto ideal
+            Así llevamos tu proyecto de la idea a la realidad
           </h2>
 
           <div className="relative grid md:grid-cols-4 gap-8 md:gap-10">
             {[
               { icon: "💬", title: "Descubrimiento", desc: "Escuchamos tus ideas y necesidades para definir el alcance real del proyecto." },
-              { icon: "📐", title: "Diseño", desc: "Creamos planos, renders y soluciones personalizadas con precisión y estilo." },
-              { icon: "🏗️", title: "Producción", desc: "Fabricamos con tecnología avanzada garantizando calidad y cumplimiento." },
-              { icon: "🔑", title: "Instalación", desc: "Coordinamos el montaje final, ajustes y entrega lista para disfrutar." },
+              { icon: "📐", title: "Diseño", desc: "Diseñamos la solución ideal, ya sea un espacio o un flujo de trabajo, con precisión y estilo." },
+              { icon: "⚙️", title: "Producción", desc: "Construimos o desarrollamos con tecnología avanzada, garantizando calidad y cumplimiento." },
+              { icon: "🔑", title: "Entrega", desc: "Coordinamos la implementación final, ajustes y una entrega lista para operar." },
             ].map((step, i) => (
               <div
                 key={i}

@@ -4,31 +4,35 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   metadataBase: new URL("https://vivanto.co"),
   title: {
-    default: "Vivanto | Diseño, Construcción y Tecnología",
+    default: "Vivanto | Construcción, Diseño e Inteligencia Artificial",
     template: "%s | Vivanto",
   },
   description:
-    "Diseñamos, construimos y conectamos espacios con precisión arquitectónica y tecnología avanzada. Especialistas en remodelaciones, mobiliario a medida y proyectos empresariales en el Eje Cafetero.",
+    "Grupo empresarial colombiano: diseño y construcción de espacios (Maderas, Construcciones) y software e IA que automatiza empresas (Vivanto Smart).",
   keywords: [
     "vivanto",
+    "vivanto smart",
     "maderas vivanto",
+    "vivanto construcción",
     "remodelaciones Pereira",
     "muebles a medida",
     "obras civiles",
     "arquitectura interior",
-    "automatización",
-    "Eje Cafetero",
     "diseño de interiores",
-    "vivanto construcción",
+    "inteligencia artificial para empresas",
+    "automatización de procesos",
+    "agentes de IA",
+    "desarrollo de software",
+    "Eje Cafetero",
   ],
   openGraph: {
     type: "website",
     locale: "es_CO",
     url: "https://vivanto.co",
     siteName: "Vivanto",
-    title: "Vivanto | Diseño, Construcción y Tecnología",
+    title: "Vivanto | Construcción, Diseño e Inteligencia Artificial",
     description:
-      "Transformamos espacios con diseño, precisión y tecnología. Proyectos integrales de construcción y mobiliario en Colombia.",
+      "Un grupo, dos mundos: diseñamos y construimos espacios, y desarrollamos software e IA que hace más eficientes a las empresas.",
     images: [
       { url: "https://vivanto.co/logo-vivanto.png", width: 1200, height: 630, alt: "Vivanto Logo" },
       { url: "/og.jpg", width: 1200, height: 630, alt: "Vivanto preview" }
@@ -36,9 +40,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vivanto | Diseño, Construcción y Tecnología",
+    title: "Vivanto | Construcción, Diseño e Inteligencia Artificial",
     description:
-      "Expertos en diseño, mobiliario y obras civiles. Innovamos en construcción y domótica en el Eje Cafetero.",
+      "Diseño, construcción y tecnología: desde mobiliario y obras civiles hasta software e IA que automatiza procesos empresariales.",
     images: ["https://vivanto.co/logo-vivanto.png", "https://vivanto.co/og.jpg"],
   },
   alternates: {
@@ -76,13 +80,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="google-site-verification" content="" />
         <meta property="og:locale" content="es_CO" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Vivanto | Diseño, Construcción y Tecnología" />
-        <meta property="og:description" content="Diseñamos, construimos y conectamos espacios con precisión arquitectónica y tecnología avanzada." />
+        <meta property="og:title" content="Vivanto | Construcción, Diseño e Inteligencia Artificial" />
+        <meta property="og:description" content="Un grupo, dos mundos: diseñamos y construimos espacios, y desarrollamos software e IA que hace más eficientes a las empresas." />
         <meta property="og:image" content="https://vivanto.co/logo-vivanto.png" />
         <meta property="og:url" content="https://vivanto.co" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Vivanto | Diseño, Construcción y Tecnología" />
-        <meta name="twitter:description" content="Expertos en diseño, mobiliario y obras civiles. Innovamos en construcción y domótica." />
+        <meta name="twitter:title" content="Vivanto | Construcción, Diseño e Inteligencia Artificial" />
+        <meta name="twitter:description" content="Diseño, construcción y tecnología: desde mobiliario y obras civiles hasta software e IA que automatiza procesos empresariales." />
         <meta name="twitter:image" content="https://vivanto.co/og.jpg" />
         <script
           type="application/ld+json"
@@ -91,6 +95,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "Vivanto S.A.S.",
+              legalName: "Vivanto S.A.S.",
+              description:
+                "Vivanto es un grupo empresarial colombiano con cuatro líneas de negocio: diseño y fabricación de mobiliario a medida (Maderas), obras civiles y remodelación (Construcciones), desarrollo de software y agentes de inteligencia artificial que automatizan procesos de negocio (Vivanto Smart), y soluciones integrales para compañías (Empresas).",
               url: "https://vivanto.co",
               logo: "https://vivanto.co/logo-vivanto.png",
               sameAs: [
@@ -98,6 +105,33 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 "https://www.facebook.com/vivanto.co",
                 "https://www.linkedin.com/company/vivanto",
                 "https://www.youtube.com/@vivanto",
+              ],
+              department: [
+                {
+                  "@type": "Organization",
+                  name: "Vivanto Maderas",
+                  description: "Diseño y fabricación de mobiliario a medida.",
+                  url: "https://maderas.vivanto.co",
+                },
+                {
+                  "@type": "Organization",
+                  name: "Vivanto Construcciones",
+                  description: "Obras civiles, remodelaciones y proyectos arquitectónicos.",
+                  url: "https://construcciones.vivanto.co",
+                },
+                {
+                  "@type": "Organization",
+                  name: "Vivanto Smart",
+                  description:
+                    "Agencia de agentes de inteligencia artificial y automatización de procesos para empresas: facturación, contabilidad, atención al cliente por WhatsApp y agendamiento.",
+                  url: "https://smart.vivanto.co",
+                },
+                {
+                  "@type": "Organization",
+                  name: "Vivanto Empresas",
+                  description: "Soluciones integrales para compañías.",
+                  url: "https://empresas.vivanto.co",
+                },
               ],
               address: {
                 "@type": "PostalAddress",
