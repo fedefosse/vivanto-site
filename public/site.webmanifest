@@ -1,0 +1,13 @@
+{
+  "name": "Vivanto",
+  "short_name": "Vivanto",
+  "description": "Grupo empresarial colombiano: diseño y construcción de espacios, y software e IA que automatiza empresas.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0e1216",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

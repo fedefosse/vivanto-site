@@ -34,8 +34,8 @@ export const metadata: Metadata = {
     description:
       "Un grupo, dos mundos: diseñamos y construimos espacios, y desarrollamos software e IA que hace más eficientes a las empresas.",
     images: [
-      { url: "https://vivanto.co/logo-vivanto.png", width: 1200, height: 630, alt: "Vivanto Logo" },
-      { url: "/og.jpg", width: 1200, height: 630, alt: "Vivanto preview" }
+      { url: "/og.jpg", width: 1200, height: 630, alt: "Vivanto — Construimos espacios. Automatizamos empresas." },
+      { url: "/images/logo-vivanto.png", width: 500, height: 500, alt: "Logo Vivanto" },
     ],
   },
   twitter: {
@@ -43,15 +43,21 @@ export const metadata: Metadata = {
     title: "Vivanto | Construcción, Diseño e Inteligencia Artificial",
     description:
       "Diseño, construcción y tecnología: desde mobiliario y obras civiles hasta software e IA que automatiza procesos empresariales.",
-    images: ["https://vivanto.co/logo-vivanto.png", "https://vivanto.co/og.jpg"],
+    images: ["/og.jpg", "/images/logo-vivanto.png"],
   },
   alternates: {
     canonical: "https://vivanto.co/",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
   icons: {
     icon: [
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
       { url: "/favicon.ico", type: "image/x-icon" }
     ],
     apple: "/apple-touch-icon.png",
@@ -66,28 +72,12 @@ export const viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
+    <html lang="es-CO">
       <head>
-        <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
-        <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
-        <link rel="shortcut icon" href="/favicon-32x32.png" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="canonical" href="https://vivanto.co/" />
-        <link rel="manifest" href="/site.webmanifest" />
-        <meta name="theme-color" content="#0e1216" />
-        <meta name="robots" content="index, follow" />
+        {/* Nota: favicons, apple-touch-icon, manifest, canonical, theme-color, og:*
+            y twitter:* ya los genera automáticamente el Metadata API de Next.js
+            (arriba). No se repiten aquí a propósito para evitar tags duplicados. */}
         <meta name="author" content="Vivanto S.A.S." />
-        <meta name="google-site-verification" content="" />
-        <meta property="og:locale" content="es_CO" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Vivanto | Construcción, Diseño e Inteligencia Artificial" />
-        <meta property="og:description" content="Un grupo, dos mundos: diseñamos y construimos espacios, y desarrollamos software e IA que hace más eficientes a las empresas." />
-        <meta property="og:image" content="https://vivanto.co/logo-vivanto.png" />
-        <meta property="og:url" content="https://vivanto.co" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Vivanto | Construcción, Diseño e Inteligencia Artificial" />
-        <meta name="twitter:description" content="Diseño, construcción y tecnología: desde mobiliario y obras civiles hasta software e IA que automatiza procesos empresariales." />
-        <meta name="twitter:image" content="https://vivanto.co/og.jpg" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -99,7 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               description:
                 "Vivanto es un grupo empresarial colombiano con cuatro líneas de negocio: diseño y fabricación de mobiliario a medida (Maderas), obras civiles y remodelación (Construcciones), desarrollo de software y agentes de inteligencia artificial que automatizan procesos de negocio (Vivanto Smart), y soluciones integrales para compañías (Empresas).",
               url: "https://vivanto.co",
-              logo: "https://vivanto.co/logo-vivanto.png",
+              logo: "https://vivanto.co/images/logo-vivanto.png",
               sameAs: [
                 "https://www.instagram.com/vivanto.co",
                 "https://www.facebook.com/vivanto.co",
