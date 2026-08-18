@@ -84,6 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
+              "@id": "https://vivanto.co/#organization",
               name: "Vivanto S.A.S.",
               legalName: "Vivanto S.A.S.",
               description:
@@ -91,7 +92,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               url: "https://vivanto.co",
               logo: "https://vivanto.co/images/logo-vivanto.png",
               sameAs: [
-                "https://www.instagram.com/vivanto.co",
+                "https://www.instagram.com/vivantogroup",
                 "https://www.facebook.com/vivanto.co",
                 "https://www.linkedin.com/company/vivanto",
                 "https://www.youtube.com/@vivanto",
@@ -115,6 +116,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   description:
                     "Agencia de agentes de inteligencia artificial y automatización de procesos para empresas: facturación, contabilidad, atención al cliente por WhatsApp y agendamiento.",
                   url: "https://smart.vivanto.co",
+                  sameAs: "https://smart.vivanto.co/#organization",
                 },
                 {
                   "@type": "Organization",

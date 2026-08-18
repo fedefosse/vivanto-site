@@ -36,6 +36,15 @@ export default function VivantoWireframe() {
     empresas: "/images/logo-empresas.png",
   };
 
+  // Extensión real de cada archivo en public/images/divisiones/ — fija, no requiere
+  // detección en el cliente (evita servir un fallback .jpg roto en el HTML del servidor).
+  const DIVISION_COVERS: Record<keyof typeof COLORS, string> = {
+    maderas: "/images/divisiones/maderas-cover.webp",
+    construcciones: "/images/divisiones/construcciones-cover.webp",
+    smart: "/images/divisiones/smart-cover.jpg",
+    empresas: "/images/divisiones/empresas-cover.webp",
+  };
+
 
   // Utilidades para detectar imágenes reales preservando el orden exacto (1,2,3,...)
   const EXTS = ["webp"] as const;
@@ -71,30 +80,6 @@ export default function VivantoWireframe() {
   const [idSources, setIdSources] = useState<string[]>([]);
   const [confianzaSources, setConfianzaSources] = useState<string[]>([]);
 
-
-  const [divisionCovers, setDivisionCovers] = useState<
-    Record<"maderas" | "construcciones" | "smart" | "empresas", string>
-  >({ maderas: "", construcciones: "", smart: "", empresas: "" });
-
-  useEffect(() => {
-    (async () => {
-      const keys: ("maderas" | "construcciones" | "smart" | "empresas")[] = [
-        "maderas",
-        "construcciones",
-        "smart",
-        "empresas",
-      ];
-      const entries = await Promise.all(
-        keys.map(async (k) => {
-          const candidate = `/images/divisiones/${k}-cover.webp`;
-          // eslint-disable-next-line no-await-in-loop
-          const ok = await imageExists(candidate);
-          return [k, ok ? candidate : ""] as const;
-        })
-      );
-      setDivisionCovers(Object.fromEntries(entries) as any);
-    })();
-  }, []);
 
   // Valida una lista de candidatos simple, manteniendo orden y evitando duplicados exactos
   const loadOrderedImages = async (candidates: string[]) => {
@@ -685,7 +670,7 @@ export default function VivantoWireframe() {
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-100">
                 <Image
-                  src={divisionCovers[b.id as keyof typeof COLORS] || `/images/divisiones/${b.id}-cover.jpg`}
+                  src={DIVISION_COVERS[b.id as keyof typeof COLORS]}
                   alt={`${b.title} – portada`}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"

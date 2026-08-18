@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidad | Vivanto",
+  title: "Política de Privacidad",
   description: "Política de privacidad y tratamiento de datos personales de Vivanto S.A.S.",
   robots: {
     index: false,
